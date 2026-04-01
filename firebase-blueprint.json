@@ -1,0 +1,175 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user identity, progress stats, and premium status.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "xp": { "type": "integer", "description": "Total experience points" },
+        "level": { "type": "integer" },
+        "streak": { "type": "integer" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "isPremium": { "type": "boolean" },
+        "avatarId": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "bio": { "type": "string", "description": "User biography" },
+        "institution": { "type": "string", "description": "Educational or clinical institution" },
+        "specialization": { "type": "string", "description": "Clinical specialization (e.g. Cardiac, Vascular)" },
+        "location": { "type": "string" },
+        "linkedinUrl": { "type": "string", "format": "uri" },
+        "websiteUrl": { "type": "string", "format": "uri" },
+        "calibrationData": {
+          "type": "object",
+          "properties": {
+            "style": { "type": "string" },
+            "strength": { "type": "string" },
+            "mission": { "type": "string" },
+            "dailyGoal": { "type": "string" },
+            "focusArea": { "type": "string" },
+            "impactPotential": { "type": "string" },
+            "calibratedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "required": ["uid", "email", "xp", "level", "streak", "isPremium", "role"]
+    },
+    "Progress": {
+      "title": "Learning Progress",
+      "description": "Tracks completed topics and quiz results.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "completedTopicIds": { "type": "array", "items": { "type": "string" } },
+        "quizScores": { "type": "object", "description": "Map of topicId to best score" },
+        "unlockedModuleIdx": { "type": "integer" },
+        "customFlashcards": { "type": "array", "items": { "type": "object" } },
+        "lastInsight": { "type": "integer" },
+        "insightText": { "type": "string" },
+        "vaultedScripts": { "type": "array", "items": { "type": "object" } }
+      },
+      "required": ["userId", "completedTopicIds", "quizScores", "unlockedModuleIdx"]
+    },
+    "Artifact": {
+      "title": "Generated Artifact",
+      "description": "Stores AI-generated study materials like summaries or diagrams.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "topicId": { "type": "string" },
+        "type": { "type": "string", "enum": ["summary", "diagram", "flashcards"] },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "topicId", "type", "content", "createdAt"]
+    },
+    "Narration": {
+      "title": "Cached Narration",
+      "description": "Stores base64 encoded TTS audio keyed by content hash.",
+      "type": "object",
+      "properties": {
+        "hash": { "type": "string" },
+        "voiceId": { "type": "string" },
+        "audioData": { "type": "string", "description": "Base64 encoded audio" },
+        "isRawPCM": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hash", "voiceId", "audioData", "isRawPCM", "createdAt"]
+    },
+    "Branding": {
+      "title": "Branding Overrides",
+      "description": "Global UI and brand configuration.",
+      "type": "object",
+      "properties": {
+        "overrides": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["overrides"]
+    },
+    "Content": {
+      "title": "Course Content",
+      "description": "Global course curriculum data.",
+      "type": "object",
+      "properties": {
+        "modules": { "type": "array", "items": { "type": "object" } },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["modules"]
+    },
+    "Song": {
+      "title": "Suno Song",
+      "description": "Educational songs from Suno (Fairway Dreams).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "url": { "type": "string", "description": "Suno or hosted audio URL" },
+        "topicId": { "type": "string", "description": "Optional topic association" },
+        "category": { "type": "string", "enum": ["General", "Physics", "Anatomy", "Instrumentation", "Doppler"] },
+        "lyrics": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "url", "category", "createdAt"]
+    },
+    "Case": {
+      "title": "Clinical Case Study",
+      "description": "Interactive diagnostic case with image and assessment.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Novice", "Expert", "Master"] },
+        "image": { "type": "string", "description": "URL to the case image" },
+        "description": { "type": "string" },
+        "question": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "correctIndex": { "type": "integer" },
+        "explanation": { "type": "string" },
+        "physicsConcept": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "difficulty", "image", "description", "question", "options", "correctIndex", "explanation", "physicsConcept"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile and global stats."
+    },
+    "/progress/{userId}": {
+      "schema": "Progress",
+      "description": "Detailed learning progress for a user."
+    },
+    "/artifacts/{artifactId}": {
+      "schema": "Artifact",
+      "description": "Collection of AI-generated study aids."
+    },
+    "/narrations/{hash}": {
+      "schema": "Narration",
+      "description": "Shared cache of generated narrations."
+    },
+    "/branding/{docId}": {
+      "schema": "Branding",
+      "description": "Global branding configurations."
+    },
+    "/content/{docId}": {
+      "schema": "Content",
+      "description": "Global course content data."
+    },
+    "/songs/{songId}": {
+      "schema": "Song",
+      "description": "Collection of educational songs."
+    },
+    "/cases/{caseId}": {
+      "schema": "Case",
+      "description": "Interactive clinical case studies."
+    }
+  }
+}

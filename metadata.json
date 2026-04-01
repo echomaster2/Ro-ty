@@ -1,0 +1,9 @@
+{
+  "name": "EchoMaster: Physics Study Guide",
+  "description": "The ultimate ARDMS® SPI Physics study companion for sonography students. Master ultrasound physics and instrumentation with comprehensive exam preparation tailored for the SPI board exam.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
